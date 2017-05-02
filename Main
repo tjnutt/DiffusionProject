@@ -1,0 +1,41 @@
+clear all;
+clc;
+
+% establish our variables and parameters
+
+minX=-pi; % our rectangle of interest is from -pi to pi in the x and y directions
+minY=-pi;
+maxX=pi;
+maxY=pi;
+dt=.0025; % time step is 2.5 msec
+nt=800; % maximum time goes up to two seconds
+D=1; % diffusion equation parameter D set to 1 for ease of use
+
+x=(minX:.1256:maxX);  % here is our discretized x axis
+dx=.1256;             % this is the x step
+y=(minY:.1256:maxY);  % discretized y axis
+dy=.1256;             % y step
+
+lambda=dt/dx^2;       % lambda is a useful value used to create our coefficient matrix for the implicit method
+
+
+% here we have our fixed value distributions for the left and right sides of the
+% rectangle (dirichlet conditions)
+
+phiY=zeros(51,1);
+
+for i=1:51
+    phiY(i)= ((y(i)-pi)^2)*sin((y(i)-pi)/2);
+end
+
+psiY=zeros(51,1);
+
+for i=1:51
+    psiY(i)=cos(pi*(y(i) - pi))*cosh(pi - y(i));
+end
+
+% initial values matrix for the rectangle
+
+u=zeros(51,51);
+u(:,1)=flip(phi);
+u(:,51)=flip(psi);
