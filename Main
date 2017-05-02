@@ -39,3 +39,47 @@ end
 u=zeros(51,51);
 u(:,1)=flip(phi);
 u(:,51)=flip(psi);
+
+% Explicit method
+
+% initialize our coefficient matrix
+
+A = zeros(2601);
+
+% building our coefficient matrix
+
+for i = 1:2601
+    A(i,i)=-2*(1/dx^2 + 1/dy^2);
+end
+ 
+for i=1:50
+    for j=1:51
+        A(i+(j-1)*51, i+(j-1)*51+1) = 1/dx^2;
+        A(i+(j-1)*51+1, i+(j-1)*51) = 1/dx^2;
+    end
+end
+ for i=1:51
+     for j=1:50
+         A(i+(j-1)*51, i+j*51) = 1/dy^2;
+         A(i+j*51, i+(j-1)*51) = 1/dy^2;
+     end
+ end
+
+% solving for the given conditions using a real time growth model
+
+for it=0:nt
+    U=reshape(u,2601,1); %Using 
+    P=A*U;
+    M=reshape(P,51,51);
+    u = u + dt*M;
+    u(:,1)=flip(phi);
+    u(:,51)=flip(psi);
+    h=surf(x,y,u,'EdgeColor','none');       %plotting the field variable
+    axis ([-pi pi -pi pi -10 10])
+     title({['2-D Diffusion with {\nu} = ',num2str(v)];['time (\itt) = ',num2str(it*dt)]})
+    xlabel('Spatial co-ordinate (x) \rightarrow')
+    ylabel('{\leftarrow} Spatial co-ordinate (y)')
+    zlabel('Transport property profile (u) \rightarrow')
+    drawnow; 
+    refreshdata(h) 
+end
