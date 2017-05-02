@@ -22,17 +22,10 @@ lambda=dt/dx^2;       % lambda is a useful value used to create our coefficient 
 % here we have our fixed value distributions for the left and right sides of the
 % rectangle (dirichlet conditions)
 
-phiY=zeros(51,1);
+phi = ((y + pi).^2).*sin((pi*(y+pi))/(2*(2*pi)));
 
-for i=1:51
-    phiY(i)= ((y(i)-pi)^2)*sin((y(i)-pi)/2);
-end
+psi = (cos(pi*(y + pi))).*cosh(pi - y);
 
-psiY=zeros(51,1);
-
-for i=1:51
-    psiY(i)=cos(pi*(y(i) - pi))*cosh(pi - y(i));
-end
 
 % initial values matrix for the rectangle
 
